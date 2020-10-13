@@ -252,7 +252,7 @@ class ProjectBuilder {
         var wrapper = path.join(this.root, 'gradlew');
         var args = this.getArgs(opts.buildType === 'debug' ? 'debug' : 'release', opts);
 
-        return spawn(wrapper, args, { stdio: 'pipe' })
+        return spawn(wrapper, args, { stdio: 'pipe', cwd: path.resolve(this.root) })
             .progress(function (stdio) {
                 if (stdio.stderr) {
                     /*
@@ -287,7 +287,7 @@ class ProjectBuilder {
         var wrapper = path.join(this.root, 'gradlew');
         var args = builder.getArgs('clean', opts);
         return Q().then(function () {
-            return spawn(wrapper, args, { stdio: 'inherit' });
+            return spawn(wrapper, args, { stdio: 'inherit', cwd: path.resolve(this.root) });
         })
             .then(function () {
                 shell.rm('-rf', path.join(builder.root, 'out'));
