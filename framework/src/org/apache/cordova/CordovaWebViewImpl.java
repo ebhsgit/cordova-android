@@ -444,8 +444,16 @@ public class CordovaWebViewImpl implements CordovaWebView {
             this.pluginManager.onNewIntent(intent);
         }
     }
+
+    private boolean _isPaused = false;
+    public boolean isPaused() {
+        return this._isPaused;
+    }
+
     @Override
     public void handlePause(boolean keepRunning) {
+        this._isPaused = true;
+
         if (!isInitialized()) {
             return;
         }
@@ -461,6 +469,8 @@ public class CordovaWebViewImpl implements CordovaWebView {
     }
     @Override
     public void handleResume(boolean keepRunning) {
+        this._isPaused = false;
+
         if (!isInitialized()) {
             return;
         }

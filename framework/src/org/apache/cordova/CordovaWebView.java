@@ -55,6 +55,8 @@ public interface CordovaWebView {
 
     boolean backHistory();
 
+    boolean isPaused();
+
     void handlePause(boolean keepRunning);
 
     void onNewIntent(Intent intent);
