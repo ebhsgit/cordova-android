@@ -54,6 +54,11 @@ buildscript {
 
         if (cdvHelpers.getConfigPreference('GradlePluginKotlinEnabled', 'false').toBoolean()) {
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+            String kotlinSerializationEnabled = cdvHelpers.getConfigPreference('KotlinSerializationEnabled', 'false')
+            if (kotlinSerializationEnabled.toBoolean()) {
+                classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+            }
         }
 
         if(cdvHelpers.getConfigPreference('GradlePluginGoogleServicesEnabled', 'false').toBoolean()) {
@@ -75,6 +80,14 @@ buildscript {
             classpath gradlePluginGoogleServicesClassPath
         }
     }
+}
+
+String kotlinCoroutineEnabled = cdvHelpers.getConfigPreference('KotlinCoroutineEnabled', 'false')
+String kotlinSerializationEnabled = cdvHelpers.getConfigPreference('KotlinSerializationEnabled', 'false')
+String kotlinxSerializationJsonVersion = cdvHelpers.getConfigPreference('KotlinSerializationJsonVersion', "1.2.1")
+
+if (kotlinSerializationEnabled.toBoolean()) {
+    apply plugin: 'kotlinx-serialization'
 }
 
 // Allow plugins to declare Maven dependencies via build-extras.gradle.
@@ -342,6 +355,19 @@ dependencies {
 
     if (cdvHelpers.getConfigPreference('GradlePluginKotlinEnabled', 'false').toBoolean()) {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+        if (kotlinCoroutineEnabled.toBoolean()) {
+            // https://search.maven.org/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_version"
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_version"
+
+            // extension functions for Tasks to coroutine
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$kotlin_version"
+        }
+
+        if (kotlinSerializationEnabled.toBoolean()) {
+            implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationJsonVersion"
+        }
     }
 
     // SUB-PROJECT DEPENDENCIES START
