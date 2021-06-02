@@ -248,11 +248,22 @@ class ProjectBuilder {
 
         buildGradle = buildGradle.replace(/(SUB-PROJECT DEPENDENCIES START)[\s\S]*(\/\/ SUB-PROJECT DEPENDENCIES END)/, '$1\n' + depsList + '    $2');
         var includeList = '';
+        var includeBuildScriptList = '';
+        var isBuildScriptInclude = function(includePath) {
+            return includePath.includes(".buildscript.");
+        }
 
         propertiesObj.gradleIncludes.forEach(function (includePath) {
-            includeList += 'apply from: "../' + includePath + '"\n';
+            if(isBuildScriptInclude(includePath)) {
+                includeBuildScriptList += 'apply from: "../' + includeBuildScriptList + '"\n';
+            }
+            else {
+                includeList += 'apply from: "../' + includePath + '"\n';
+            }
         });
         buildGradle = buildGradle.replace(/(PLUGIN GRADLE EXTENSIONS START)[\s\S]*(\/\/ PLUGIN GRADLE EXTENSIONS END)/, '$1\n' + includeList + '$2');
+        buildGradle = buildGradle.replace(/(PLUGIN GRADLE BUILDSCRIPT EXTENSIONS START)[\s\S]*(\/\/ PLUGIN GRADLE BUILDSCRIPT EXTENSIONS END)/, '$1\n' + includeBuildScriptList + '$2');
+
         // This needs to be stored in the app gradle, not the root grade
         fs.writeFileSync(path.join(this.root, 'app', 'build.gradle'), buildGradle);
     }

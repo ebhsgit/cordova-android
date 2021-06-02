@@ -74,6 +74,9 @@ buildscript {
             println "Adding classpath: ${gradlePluginGoogleServicesClassPath}"
             classpath gradlePluginGoogleServicesClassPath
         }
+
+        // PLUGIN GRADLE BUILDSCRIPT EXTENSIONS START
+        // PLUGIN GRADLE BUILDSCRIPT EXTENSIONS END
     }
 }
 
