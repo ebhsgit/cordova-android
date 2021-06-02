@@ -255,7 +255,7 @@ class ProjectBuilder {
 
         propertiesObj.gradleIncludes.forEach(function (includePath) {
             if(isBuildScriptInclude(includePath)) {
-                includeBuildScriptList += 'apply from: "../' + includeBuildScriptList + '"\n';
+                includeBuildScriptList += 'apply from: "../' + includePath + '"\n';
             }
             else {
                 includeList += 'apply from: "../' + includePath + '"\n';
